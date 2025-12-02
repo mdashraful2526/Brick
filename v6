@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>সিভিল ইঞ্জিনিয়ারিং ক্যালকুলেটর</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 800px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 0.9em;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 1em;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            margin-top: 10px;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        button {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-calculate {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-calculate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-reset {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-reset:hover {
+            background: #e0e0e0;
+        }
+
+        .btn-download {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-download:hover {
+            background: #059669;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        .results {
+            margin-top: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, #f6f8fb 0%, #e9ecef 100%);
+            border-radius: 12px;
+            display: none;
+        }
+
+        .results.show {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-title {
+            font-size: 1.5em;
+            color: #667eea;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px;
+            margin-bottom: 10px;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .result-label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .result-value {
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+            .container {
+                box-shadow: none;
+            }
+            .input-group, .btn-group {
+                display: none;
+            }
+            .results {
+                display: block !important;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            h1 {
+                font-size: 1.5em;
+            }
+            .btn-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏗️ সিভিল ইঞ্জিনিয়ারিং ক্যালকুলেটর</h1>
+        <p class="subtitle">দেওয়াল নির্মাণের জন্য ইট, সিমেন্ট ও বালির সঠিক হিসাব</p>
+
+        <div class="input-group">
+            <label for="length">দৈর্ঘ্য (ফুট)</label>
+            <input type="number" id="length" placeholder="যেমন: ১০" step="0.01" min="0">
+        </div>
+
+        <div class="input-group">
+            <label for="height">উচ্চতা (ফুট)</label>
+            <input type="number" id="height" placeholder="যেমন: ৫" step="0.01" min="0">
+        </div>
+
+        <div class="input-group">
+            <label>গাঁথুনির প্রস্থ</label>
+            <div class="radio-group">
+                <label class="radio-option">
+                    <input type="radio" name="thickness" value="5" checked>
+                    <span>৫ ইঞ্চি গাঁথুনি</span>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="thickness" value="10">
+                    <span>১০ ইঞ্চি গাঁথুনি</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="btn-group">
+            <button class="btn-calculate" onclick="calc()">হিসাব করুন</button>
+            <button class="btn-reset" onclick="rst()">রিসেট করুন</button>
+        </div>
+
+        <div class="results" id="results">
+            <h2 class="result-title">📊 হিসাবের ফলাফল</h2>
+            <div class="result-item">
+                <span class="result-label">দেওয়ালের দৈর্ঘ্য:</span>
+                <span class="result-value" id="r-length">-</span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">দেওয়ালের উচ্চতা:</span>
+                <span class="result-value" id="r-height">-</span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">গাঁথুনির প্রস্থ:</span>
+                <span class="result-value" id="r-thickness">-</span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">মোট ইটের সংখ্যা:</span>
+                <span class="result-value" id="r-bricks">-</span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">সিমেন্টের পরিমাণ:</span>
+                <span class="result-value" id="r-cement">-</span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">বালির পরিমাণ:</span>
+                <span class="result-value" id="r-sand">-</span>
+            </div>
+            <button class="btn-download" onclick="dwnld()" style="margin-top: 20px; width: 100%;">📥 ডাউনলোড করুন (PDF)</button>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            const p = ['contextmenu', 'keydown', 'selectstart'];
+            p.forEach(e => {
+                document.addEventListener(e, function(ev) {
+                    if (e === 'contextmenu') {
+                        ev.preventDefault();
+                        return false;
+                    }
+                    if (e === 'keydown' && (ev.ctrlKey && (ev.keyCode === 85 || ev.keyCode === 83 || ev.keyCode === 67 || ev.key === 'u' || ev.key === 's' || ev.key === 'c')) || ev.keyCode === 123) {
+                        ev.preventDefault();
+                        return false;
+                    }
+                });
+            });
+        })();
+
+        function calc() {
+            const l = parseFloat(document.getElementById('length').value);
+            const h = parseFloat(document.getElementById('height').value);
+            const t = document.querySelector('input[name="thickness"]:checked').value;
+
+            if (!l || !h || l <= 0 || h <= 0) {
+                alert('দয়া করে সঠিক মান লিখুন!');
+                return;
+            }
+
+            const tInch = parseFloat(t);
+            const tFt = tInch / 12;
+            
+            const wVol = l * h * tFt;
+            
+            const dryMortar = wVol * 0.35;
+            
+            const cmt = ((dryMortar * 1) / 5) * 0.8;
+            const cmtBags = cmt.toFixed(2);
+            
+            const snd = (dryMortar * 4) / 5;
+            
+            const brkMult = tInch === 5 ? 4.8 : 9.8;
+            const brks = Math.ceil(l * h * brkMult);
+
+            document.getElementById('r-length').textContent = l.toFixed(2) + ' ফুট';
+            document.getElementById('r-height').textContent = h.toFixed(2) + ' ফুট';
+            document.getElementById('r-thickness').textContent = tInch + ' ইঞ্চি';
+            document.getElementById('r-bricks').textContent = brks + ' টি';
+            document.getElementById('r-cement').textContent = cmtBags + ' ব্যাগ';
+            document.getElementById('r-sand').textContent = snd.toFixed(2) + ' ঘনফুট';
+
+            document.getElementById('results').classList.add('show');
+        }
+
+        function rst() {
+            document.getElementById('length').value = '';
+            document.getElementById('height').value = '';
+            document.querySelector('input[name="thickness"][value="5"]').checked = true;
+            document.getElementById('results').classList.remove('show');
+        }
+
+        function dwnld() {
+            window.print();
+        }
+    </script>
+</body>
+</html>
