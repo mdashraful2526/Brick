@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>লাইভ ক্রিকেট স্কোরবোর্ড</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+            height: 100vh;
+            overflow: hidden;
+            color: white;
+        }
+
+        .container {
+            max-width: 1920px;
+            height: 100vh;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+        }
+
+        .match-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .match-btn {
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .match-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+
+        .match-btn.active {
+            background: #4CAF50;
+            border-color: #4CAF50;
+        }
+
+        .teams-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .team {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .team-logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: white;
+            padding: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .team-name {
+            font-size: 28px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .vs {
+            font-size: 32px;
+            font-weight: bold;
+            color: #FFD700;
+            text-shadow: 0 0 10px rgba(255,215,0,0.5);
+        }
+
+        .match-info {
+            text-align: center;
+            padding: 10px;
+            background: rgba(255,215,0,0.1);
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .match-status {
+            font-size: 18px;
+            font-weight: bold;
+            color: #FFD700;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            overflow-y: auto;
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #FFD700;
+            color: #FFD700;
+        }
+
+        .score-display {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+        }
+
+        .team-score {
+            text-align: center;
+        }
+
+        .team-score-name {
+            font-size: 16px;
+            color: #ccc;
+            margin-bottom: 5px;
+        }
+
+        .score-big {
+            font-size: 42px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .player-card {
+            background: rgba(255,255,255,0.08);
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+            border-left: 4px solid transparent;
+        }
+
+        .player-card:hover {
+            background: rgba(255,255,255,0.12);
+            transform: translateX(5px);
+        }
+
+        .player-card.batting {
+            border-left-color: #4CAF50;
+        }
+
+        .player-card.bowling {
+            border-left-color: #FF5722;
+        }
+
+        .player-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .player-icon {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .player-name {
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .player-stats {
+            display: flex;
+            gap: 15px;
+            font-size: 14px;
+        }
+
+        .stat {
+            background: rgba(255,255,255,0.1);
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
+        .stat-label {
+            color: #aaa;
+            font-size: 11px;
+        }
+
+        .stat-value {
+            color: white;
+            font-weight: bold;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            font-size: 18px;
+        }
+
+        .spinner {
+            border: 4px solid rgba(255,255,255,0.1);
+            border-top: 4px solid #FFD700;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .live-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background: #ff0000;
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+            margin-right: 8px;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255,215,0,0.5);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255,215,0,0.7);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="match-selector" id="matchSelector">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    ম্যাচ লোড হচ্ছে...
+                </div>
+            </div>
+            
+            <div id="matchHeader" style="display: none;">
+                <div class="teams-header">
+                    <div class="team">
+                        <img class="team-logo" id="team1Logo" src="" alt="Team 1">
+                        <div>
+                            <div class="team-name" id="team1Name">-</div>
+                        </div>
+                    </div>
+                    <div class="vs">VS</div>
+                    <div class="team">
+                        <div style="text-align: right;">
+                            <div class="team-name" id="team2Name">-</div>
+                        </div>
+                        <img class="team-logo" id="team2Logo" src="" alt="Team 2">
+                    </div>
+                </div>
+                
+                <div class="match-info">
+                    <div class="match-status">
+                        <span class="live-indicator"></span>
+                        <span id="matchStatus">-</span>
+                    </div>
+                    <div style="font-size: 14px; color: #ccc; margin-top: 5px;" id="matchVenue">-</div>
+                </div>
+
+                <div class="score-display" id="scoreDisplay">
+                    <!-- Scores will be inserted here -->
+                </div>
+            </div>
+        </div>
+
+        <div class="content-grid">
+            <div class="section">
+                <div class="section-title">🏏 ব্যাটিং করছে</div>
+                <div id="battingPlayers">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        ডেটা লোড হচ্ছে...
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">⚡ বোলিং করছে</div>
+                <div id="bowlingPlayers">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        ডেটা লোড হচ্ছে...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_KEY = '24044012-5e57-4552-b553-f0d0174abf7d';
+        const BASE_URL = 'https://api.cricapi.com/v1';
+        let currentMatchId = null;
+        let updateInterval = null;
+
+        // Load all matches
+        async function loadMatches() {
+            try {
+                const response = await fetch(`${BASE_URL}/currentMatches?apikey=${API_KEY}&offset=0`);
+                const data = await response.json();
+                
+                if (data.status === 'success' && data.data.length > 0) {
+                    displayMatchButtons(data.data);
+                    // Auto-select first ongoing match
+                    const ongoingMatch = data.data.find(m => m.matchStarted && !m.matchEnded);
+                    if (ongoingMatch) {
+                        selectMatch(ongoingMatch.id, data.data);
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading matches:', error);
+                document.getElementById('matchSelector').innerHTML = '<div class="loading">ম্যাচ লোড করতে সমস্যা হয়েছে</div>';
+            }
+        }
+
+        function displayMatchButtons(matches) {
+            const selector = document.getElementById('matchSelector');
+            selector.innerHTML = '';
+            
+            matches.forEach(match => {
+                const btn = document.createElement('button');
+                btn.className = 'match-btn';
+                btn.textContent = `${match.teams[0]} vs ${match.teams[1]}`;
+                if (match.matchStarted && !match.matchEnded) {
+                    btn.innerHTML = '<span class="live-indicator"></span>' + btn.textContent;
+                }
+                btn.onclick = () => selectMatch(match.id, matches);
+                selector.appendChild(btn);
+            });
+        }
+
+        function selectMatch(matchId, allMatches) {
+            currentMatchId = matchId;
+            const match = allMatches.find(m => m.id === matchId);
+            
+            // Update active button
+            document.querySelectorAll('.match-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Display match details
+            displayMatchHeader(match);
+            loadMatchDetails(matchId);
+            
+            // Clear previous interval and start new one
+            if (updateInterval) clearInterval(updateInterval);
+            updateInterval = setInterval(() => loadMatchDetails(matchId), 30000); // Update every 30 seconds
+        }
+
+        function displayMatchHeader(match) {
+            document.getElementById('matchHeader').style.display = 'block';
+            
+            // Team names and logos
+            document.getElementById('team1Name').textContent = match.teams[0];
+            document.getElementById('team2Name').textContent = match.teams[1];
+            document.getElementById('team1Logo').src = match.teamInfo[0]?.img || 'https://via.placeholder.com/80';
+            document.getElementById('team2Logo').src = match.teamInfo[1]?.img || 'https://via.placeholder.com/80';
+            
+            // Match info
+            document.getElementById('matchStatus').textContent = match.status;
+            document.getElementById('matchVenue').textContent = match.venue;
+            
+            // Display scores
+            displayScores(match.score, match.teams);
+        }
+
+        function displayScores(scores, teams) {
+            const scoreDisplay = document.getElementById('scoreDisplay');
+            scoreDisplay.innerHTML = '';
+            
+            if (scores && scores.length > 0) {
+                scores.forEach((score, index) => {
+                    const teamName = teams[index] || `Team ${index + 1}`;
+                    const scoreDiv = document.createElement('div');
+                    scoreDiv.className = 'team-score';
+                    scoreDiv.innerHTML = `
+                        <div class="team-score-name">${teamName}</div>
+                        <div class="score-big">${score.r}/${score.w}</div>
+                        <div style="font-size: 14px; color: #aaa;">(${score.o} overs)</div>
+                    `;
+                    scoreDisplay.appendChild(scoreDiv);
+                });
+            } else {
+                scoreDisplay.innerHTML = '<div style="text-align: center; color: #aaa;">স্কোর আপডেট হচ্ছে...</div>';
+            }
+        }
+
+        async function loadMatchDetails(matchId) {
+            try {
+                const response = await fetch(`${BASE_URL}/match_info?apikey=${API_KEY}&id=${matchId}`);
+                const data = await response.json();
+                
+                if (data.status === 'success' && data.data) {
+                    displayPlayers(data.data);
+                }
+            } catch (error) {
+                console.error('Error loading match details:', error);
+            }
+        }
+
+        function displayPlayers(matchData) {
+            // Sample data - API may not provide live player stats
+            // This demonstrates the structure
+            const battingHTML = `
+                <div class="player-card batting">
+                    <div class="player-info">
+                        <div class="player-icon">🏏</div>
+                        <div class="player-name">ব্যাটসম্যান ১</div>
+                    </div>
+                    <div class="player-stats">
+                        <div class="stat">
+                            <div class="stat-label">রান</div>
+                            <div class="stat-value">-</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-label">বল</div>
+                            <div class="stat-value">-</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-label">৪/৬</div>
+                            <div class="stat-value">-/-</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="player-card batting">
+                    <div class="player-info">
+                        <div class="player-icon">🏏</div>
+                        <div class="player-name">ব্যাটসম্যান ২</div>
+                    </div>
+                    <div class="player-stats">
+                        <div class="stat">
+                            <div class="stat-label">রান</div>
+                            <div class="stat-value">-</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-label">বল</div>
+                            <div class="stat-value">-</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-label">৪/৬</div>
+                            <div class="stat-value">-/-</div>
+                        </div>
+                    </div>
+                </div>
+                <div style="text-align: center; padding: 20px; color: #aaa;">
+                    লাইভ প্লেয়ার ডেটার জন্য প্রিমিয়াম API প্রয়োজন
+                </div>
+            `;
+
+            const bowlingHTML = `
+                <div class="player-card bowling">
+                    <div class="player-info">
+                        <div class="player-icon">⚡</div>
+                        <div class="player-name">বোলার</div>
+                    </div>
+                    <div class="player-stats">
+                        <div class="stat">
+                            <div class="stat-label">ওভার</div>
+                            <div class="stat-value">-</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-label">রান</div>
+                            <div class="stat-value">-</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-label">উইকেট</div>
+                            <div class="stat-value">-</div>
+                        </div>
+                    </div>
+                </div>
+                <div style="text-align: center; padding: 20px; color: #aaa;">
+                    লাইভ প্লেয়ার ডেটার জন্য প্রিমিয়াম API প্রয়োজন
+                </div>
+            `;
+
+            document.getElementById('battingPlayers').innerHTML = battingHTML;
+            document.getElementById('bowlingPlayers').innerHTML = bowlingHTML;
+        }
+
+        // Initialize
+        loadMatches();
+    </script>
+</body>
+</html>
