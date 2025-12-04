@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>লাইভ ক্রিকেট স্কোরবোর্ড</title>
+    <title>লাইভ ক্রিকেট স্কোর</title>
     <style>
         * {
             margin: 0;
@@ -13,257 +13,78 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+            background: #f8f9fa;
+            color: #202124;
             height: 100vh;
             overflow: hidden;
-            color: white;
         }
 
         .container {
-            max-width: 1920px;
+            max-width: 100%;
             height: 100vh;
-            margin: 0 auto;
-            padding: 20px;
             display: flex;
             flex-direction: column;
+            padding: 10px;
         }
 
         .header {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            margin-bottom: 20px;
-        }
-
-        .match-selector {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-        }
-
-        .match-btn {
-            background: rgba(255,255,255,0.1);
-            border: 2px solid rgba(255,255,255,0.3);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 14px;
-        }
-
-        .match-btn:hover {
-            background: rgba(255,255,255,0.2);
-            transform: translateY(-2px);
-        }
-
-        .match-btn.active {
-            background: #4CAF50;
-            border-color: #4CAF50;
-        }
-
-        .teams-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 10px;
-            margin-bottom: 10px;
-        }
-
-        .team {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .team-logo {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
             background: white;
-            padding: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        }
-
-        .team-name {
-            font-size: 28px;
-            font-weight: bold;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-        }
-
-        .vs {
-            font-size: 32px;
-            font-weight: bold;
-            color: #FFD700;
-            text-shadow: 0 0 10px rgba(255,215,0,0.5);
-        }
-
-        .match-info {
-            text-align: center;
-            padding: 10px;
-            background: rgba(255,215,0,0.1);
             border-radius: 8px;
+            padding: 12px;
             margin-bottom: 10px;
+            box-shadow: 0 1px 3px rgba(32,33,36,0.28);
+            flex-shrink: 0;
         }
 
-        .match-status {
-            font-size: 18px;
-            font-weight: bold;
-            color: #FFD700;
-        }
-
-        .content-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            flex: 1;
-            overflow: hidden;
-        }
-
-        .section {
-            background: rgba(255,255,255,0.05);
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        .match-tabs {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            max-height: 80px;
             overflow-y: auto;
         }
 
-        .section-title {
-            font-size: 22px;
-            font-weight: bold;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #FFD700;
-            color: #FFD700;
-        }
-
-        .score-display {
-            display: flex;
-            justify-content: space-around;
-            margin-bottom: 20px;
-            padding: 15px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 10px;
-        }
-
-        .team-score {
-            text-align: center;
-        }
-
-        .team-score-name {
-            font-size: 16px;
-            color: #ccc;
-            margin-bottom: 5px;
-        }
-
-        .score-big {
-            font-size: 42px;
-            font-weight: bold;
-            color: #4CAF50;
-        }
-
-        .player-card {
-            background: rgba(255,255,255,0.08);
-            padding: 12px;
-            margin-bottom: 10px;
-            border-radius: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: all 0.3s;
-            border-left: 4px solid transparent;
-        }
-
-        .player-card:hover {
-            background: rgba(255,255,255,0.12);
-            transform: translateX(5px);
-        }
-
-        .player-card.batting {
-            border-left-color: #4CAF50;
-        }
-
-        .player-card.bowling {
-            border-left-color: #FF5722;
-        }
-
-        .player-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .player-icon {
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-        }
-
-        .player-name {
-            font-size: 16px;
+        .match-tab {
+            background: #f8f9fa;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 16px;
+            cursor: pointer;
+            font-size: 13px;
+            color: #5f6368;
+            transition: all 0.2s;
             font-weight: 500;
+            white-space: nowrap;
         }
 
-        .player-stats {
-            display: flex;
-            gap: 15px;
-            font-size: 14px;
+        .match-tab:hover {
+            background: #e8eaed;
         }
 
-        .stat {
-            background: rgba(255,255,255,0.1);
-            padding: 5px 10px;
-            border-radius: 5px;
-        }
-
-        .stat-label {
-            color: #aaa;
-            font-size: 11px;
-        }
-
-        .stat-value {
+        .match-tab.active {
+            background: #1a73e8;
             color: white;
-            font-weight: bold;
         }
 
-        .loading {
-            text-align: center;
-            padding: 40px;
-            font-size: 18px;
+        .live-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: #ea4335;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-weight: 600;
+            margin-right: 5px;
         }
 
-        .spinner {
-            border: 4px solid rgba(255,255,255,0.1);
-            border-top: 4px solid #FFD700;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .live-indicator {
-            display: inline-block;
-            width: 10px;
-            height: 10px;
-            background: #ff0000;
+        .live-dot {
+            width: 5px;
+            height: 5px;
+            background: white;
             border-radius: 50%;
             animation: pulse 1.5s infinite;
-            margin-right: 8px;
         }
 
         @keyframes pulse {
@@ -271,280 +92,580 @@
             50% { opacity: 0.3; }
         }
 
+        .main-content {
+            display: flex;
+            gap: 10px;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .scoreboard {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(32,33,36,0.28);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .match-title {
+            font-size: 16px;
+            color: #202124;
+            font-weight: 500;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .teams-score {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            margin-bottom: 20px;
+        }
+
+        .team {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .team-flag {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid #e8eaed;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .team-flag img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .team-name {
+            font-size: 14px;
+            color: #5f6368;
+            font-weight: 500;
+        }
+
+        .team-score {
+            font-size: 32px;
+            font-weight: 600;
+            color: #202124;
+        }
+
+        .team-overs {
+            font-size: 13px;
+            color: #5f6368;
+        }
+
+        .vs {
+            font-size: 20px;
+            color: #5f6368;
+            font-weight: 500;
+        }
+
+        .match-status {
+            text-align: center;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            margin-bottom: 12px;
+        }
+
+        .status-text {
+            font-size: 14px;
+            color: #202124;
+            font-weight: 500;
+        }
+
+        .rates-container {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-top: 10px;
+        }
+
+        .rate-item {
+            text-align: center;
+        }
+
+        .rate-label {
+            font-size: 11px;
+            color: #5f6368;
+            margin-bottom: 3px;
+        }
+
+        .rate-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: #202124;
+        }
+
+        .match-info {
+            text-align: center;
+            font-size: 12px;
+            color: #5f6368;
+            margin-top: 10px;
+        }
+
+        .players-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            overflow: hidden;
+        }
+
+        .player-card {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 1px 3px rgba(32,33,36,0.28);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .card-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #202124;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #1a73e8;
+            flex-shrink: 0;
+        }
+
+        .player-list {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .player-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .player-row:hover {
+            background: #e8eaed;
+        }
+
+        .player-row.current {
+            background: #e8f0fe;
+            border-left: 3px solid #1a73e8;
+        }
+
+        .player-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .player-icon {
+            width: 28px;
+            height: 28px;
+            background: #1a73e8;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .player-name {
+            font-size: 13px;
+            color: #202124;
+            font-weight: 500;
+        }
+
+        .batting-tag {
+            background: #34a853;
+            color: white;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-size: 9px;
+            font-weight: 600;
+            margin-left: 6px;
+        }
+
+        .bowling-tag {
+            background: #ea4335;
+            color: white;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-size: 9px;
+            font-weight: 600;
+            margin-left: 6px;
+        }
+
+        .player-stats {
+            display: flex;
+            gap: 12px;
+            font-size: 12px;
+            color: #5f6368;
+        }
+
+        .stat-value {
+            font-weight: 600;
+            color: #202124;
+        }
+
+        .auto-update {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.75);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .update-dot {
+            width: 6px;
+            height: 6px;
+            background: #34a853;
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+
         ::-webkit-scrollbar {
-            width: 8px;
+            width: 5px;
         }
 
         ::-webkit-scrollbar-track {
-            background: rgba(255,255,255,0.05);
-            border-radius: 10px;
+            background: #f1f1f1;
         }
 
         ::-webkit-scrollbar-thumb {
-            background: rgba(255,215,0,0.5);
-            border-radius: 10px;
+            background: #888;
+            border-radius: 3px;
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: rgba(255,215,0,0.7);
+            background: #555;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <div class="match-selector" id="matchSelector">
-                <div class="loading">
-                    <div class="spinner"></div>
-                    ম্যাচ লোড হচ্ছে...
-                </div>
-            </div>
-            
-            <div id="matchHeader" style="display: none;">
-                <div class="teams-header">
-                    <div class="team">
-                        <img class="team-logo" id="team1Logo" src="" alt="Team 1">
-                        <div>
-                            <div class="team-name" id="team1Name">-</div>
-                        </div>
-                    </div>
-                    <div class="vs">VS</div>
-                    <div class="team">
-                        <div style="text-align: right;">
-                            <div class="team-name" id="team2Name">-</div>
-                        </div>
-                        <img class="team-logo" id="team2Logo" src="" alt="Team 2">
-                    </div>
-                </div>
-                
-                <div class="match-info">
-                    <div class="match-status">
-                        <span class="live-indicator"></span>
-                        <span id="matchStatus">-</span>
-                    </div>
-                    <div style="font-size: 14px; color: #ccc; margin-top: 5px;" id="matchVenue">-</div>
-                </div>
-
-                <div class="score-display" id="scoreDisplay">
-                    <!-- Scores will be inserted here -->
-                </div>
-            </div>
+            <div class="match-tabs" id="matchTabs"></div>
         </div>
 
-        <div class="content-grid">
-            <div class="section">
-                <div class="section-title">🏏 ব্যাটিং করছে</div>
-                <div id="battingPlayers">
-                    <div class="loading">
-                        <div class="spinner"></div>
-                        ডেটা লোড হচ্ছে...
+        <div class="main-content">
+            <div class="scoreboard">
+                <div class="match-title" id="matchTitle">Match Loading...</div>
+
+                <div class="teams-score">
+                    <div class="team">
+                        <div class="team-flag">
+                            <img id="team1Flag" src="https://via.placeholder.com/70" alt="Team 1">
+                        </div>
+                        <div class="team-name" id="team1Name">Team 1</div>
+                        <div class="team-score" id="team1Score">-</div>
+                        <div class="team-overs" id="team1Overs">-</div>
+                    </div>
+
+                    <div class="vs">VS</div>
+
+                    <div class="team">
+                        <div class="team-flag">
+                            <img id="team2Flag" src="https://via.placeholder.com/70" alt="Team 2">
+                        </div>
+                        <div class="team-name" id="team2Name">Team 2</div>
+                        <div class="team-score" id="team2Score">-</div>
+                        <div class="team-overs" id="team2Overs">-</div>
                     </div>
                 </div>
+
+                <div class="match-status">
+                    <div class="status-text" id="statusText">Loading...</div>
+                    
+                    <div class="rates-container" id="ratesContainer" style="display: none;">
+                        <div class="rate-item">
+                            <div class="rate-label">CRR</div>
+                            <div class="rate-value" id="crr">-</div>
+                        </div>
+                        <div class="rate-item">
+                            <div class="rate-label">RRR</div>
+                            <div class="rate-value" id="rrr">-</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="match-info" id="matchInfo">-</div>
             </div>
 
-            <div class="section">
-                <div class="section-title">⚡ বোলিং করছে</div>
-                <div id="bowlingPlayers">
-                    <div class="loading">
-                        <div class="spinner"></div>
-                        ডেটা লোড হচ্ছে...
+            <div class="players-section">
+                <div class="player-card">
+                    <div class="card-title">🏏 ব্যাটিং করছে</div>
+                    <div class="player-list" id="battersList">
+                        <div style="text-align: center; color: #5f6368; padding: 20px;">Loading...</div>
+                    </div>
+                </div>
+
+                <div class="player-card">
+                    <div class="card-title">⚡ বোলিং করছে</div>
+                    <div class="player-list" id="bowlersList">
+                        <div style="text-align: center; color: #5f6368; padding: 20px;">Loading...</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <script>
-        const API_KEY = '24044012-5e57-4552-b553-f0d0174abf7d';
-        const BASE_URL = 'https://api.cricapi.com/v1';
-        let currentMatchId = null;
-        let updateInterval = null;
+    <div class="auto-update">
+        <div class="update-dot"></div>
+        <span>আপডেট চলছে</span>
+    </div>
 
-        // Load all matches
-        async function loadMatches() {
-            try {
-                const response = await fetch(`${BASE_URL}/currentMatches?apikey=${API_KEY}&offset=0`);
-                const data = await response.json();
-                
-                if (data.status === 'success' && data.data.length > 0) {
-                    displayMatchButtons(data.data);
-                    // Auto-select first ongoing match
-                    const ongoingMatch = data.data.find(m => m.matchStarted && !m.matchEnded);
-                    if (ongoingMatch) {
-                        selectMatch(ongoingMatch.id, data.data);
-                    }
-                }
-            } catch (error) {
-                console.error('Error loading matches:', error);
-                document.getElementById('matchSelector').innerHTML = '<div class="loading">ম্যাচ লোড করতে সমস্যা হয়েছে</div>';
+    <script>
+        // Fallback data - your provided API response
+        const fallbackMatches = [
+            {
+                "id": "1b025bd5-fdc4-40c7-bfe2-64cd096bbca6",
+                "name": "India vs South Africa, 2nd ODI",
+                "matchType": "odi",
+                "status": "South Africa need 183 runs",
+                "venue": "Shaheed Veer Narayan Singh International Stadium, Raipur",
+                "teams": ["India", "South Africa"],
+                "teamInfo": [
+                    {"name": "India", "img": "https://g.cricapi.com/iapi/31-637877061080567215.webp?w=48"},
+                    {"name": "South Africa", "img": "https://g.cricapi.com/iapi/82-637877071839088912.webp?w=48"}
+                ],
+                "score": [
+                    {"r": 358, "w": 5, "o": 50},
+                    {"r": 176, "w": 2, "o": 26.4}
+                ],
+                "matchStarted": true,
+                "matchEnded": false
+            },
+            {
+                "id": "a25bcc5e-b1c9-40eb-8390-343ed51035ec",
+                "name": "Bangladesh vs Ireland, 3rd T20I",
+                "matchType": "t20",
+                "status": "Bangladesh won by 8 wkts",
+                "venue": "Bir Sreshtho Flight Lieutenant Matiur Rahman Stadium, Chattogram",
+                "teams": ["Bangladesh", "Ireland"],
+                "teamInfo": [
+                    {"name": "Bangladesh", "img": "https://g.cricapi.com/iapi/9-637877074109248302.webp?w=48"},
+                    {"name": "Ireland", "img": "https://g.cricapi.com/iapi/33-637926315578500224.png?w=48"}
+                ],
+                "score": [
+                    {"r": 117, "w": 10, "o": 19.5},
+                    {"r": 119, "w": 2, "o": 13.4}
+                ],
+                "matchStarted": true,
+                "matchEnded": true
+            },
+            {
+                "id": "6454c2bd-3709-47a6-81ca-9091f97cc9de",
+                "name": "New Zealand vs West Indies, 1st Test",
+                "matchType": "test",
+                "status": "Day 2: Stumps - New Zealand lead by 96 runs",
+                "venue": "Hagley Oval, Christchurch",
+                "teams": ["New Zealand", "West Indies"],
+                "teamInfo": [
+                    {"name": "New Zealand", "img": "https://g.cricapi.com/iapi/57-637877076980737903.webp?w=48"},
+                    {"name": "West Indies", "img": "https://g.cricapi.com/iapi/100-637877077978319234.webp?w=48"}
+                ],
+                "score": [
+                    {"r": 231, "w": 10, "o": 70.3},
+                    {"r": 167, "w": 10, "o": 75.4}
+                ],
+                "matchStarted": true,
+                "matchEnded": false
             }
+        ];
+
+        let allMatches = [];
+        let currentMatchId = null;
+
+        // Sample player data
+        const sampleBatsmen = [
+            { name: 'Batsman 1', runs: 76, balls: 48, fours: 9, sixes: 2, current: true },
+            { name: 'Batsman 2', runs: 43, balls: 29, fours: 5, sixes: 1, current: true },
+            { name: 'Batsman 3', runs: 34, balls: 28, fours: 4, sixes: 0, out: 'c Fielder b Bowler' },
+            { name: 'Batsman 4', runs: 12, balls: 15, fours: 1, sixes: 0, out: 'lbw b Bowler' }
+        ];
+
+        const sampleBowlers = [
+            { name: 'Bowler 1', overs: 6.4, runs: 42, wickets: 1, economy: 6.30, current: true },
+            { name: 'Bowler 2', overs: 7, runs: 38, wickets: 1, economy: 5.43 },
+            { name: 'Bowler 3', overs: 5, runs: 28, wickets: 0, economy: 5.60 },
+            { name: 'Bowler 4', overs: 6, runs: 35, wickets: 1, economy: 5.83 }
+        ];
+
+        function init() {
+            // Start with fallback data immediately
+            allMatches = fallbackMatches;
+            displayMatchTabs(allMatches);
+            selectMatch(allMatches[0]);
         }
 
-        function displayMatchButtons(matches) {
-            const selector = document.getElementById('matchSelector');
-            selector.innerHTML = '';
-            
-            matches.forEach(match => {
-                const btn = document.createElement('button');
-                btn.className = 'match-btn';
-                btn.textContent = `${match.teams[0]} vs ${match.teams[1]}`;
+        function displayMatchTabs(matches) {
+            const tabsContainer = document.getElementById('matchTabs');
+            tabsContainer.innerHTML = '';
+
+            matches.forEach((match, index) => {
+                const tab = document.createElement('button');
+                tab.className = 'match-tab';
+                if (index === 0) tab.classList.add('active');
+
+                let tabContent = '';
                 if (match.matchStarted && !match.matchEnded) {
-                    btn.innerHTML = '<span class="live-indicator"></span>' + btn.textContent;
+                    tabContent = '<span class="live-badge"><span class="live-dot"></span>LIVE</span>';
                 }
-                btn.onclick = () => selectMatch(match.id, matches);
-                selector.appendChild(btn);
+                tabContent += match.name;
+
+                tab.innerHTML = tabContent;
+                tab.onclick = () => {
+                    document.querySelectorAll('.match-tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    selectMatch(match);
+                };
+                tabsContainer.appendChild(tab);
             });
         }
 
-        function selectMatch(matchId, allMatches) {
-            currentMatchId = matchId;
-            const match = allMatches.find(m => m.id === matchId);
+        function selectMatch(match) {
+            if (!match) return;
             
-            // Update active button
-            document.querySelectorAll('.match-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-            
-            // Display match details
-            displayMatchHeader(match);
-            loadMatchDetails(matchId);
-            
-            // Clear previous interval and start new one
-            if (updateInterval) clearInterval(updateInterval);
-            updateInterval = setInterval(() => loadMatchDetails(matchId), 30000); // Update every 30 seconds
+            currentMatchId = match.id;
+            updateScoreboard(match);
         }
 
-        function displayMatchHeader(match) {
-            document.getElementById('matchHeader').style.display = 'block';
-            
-            // Team names and logos
-            document.getElementById('team1Name').textContent = match.teams[0];
-            document.getElementById('team2Name').textContent = match.teams[1];
-            document.getElementById('team1Logo').src = match.teamInfo[0]?.img || 'https://via.placeholder.com/80';
-            document.getElementById('team2Logo').src = match.teamInfo[1]?.img || 'https://via.placeholder.com/80';
-            
-            // Match info
-            document.getElementById('matchStatus').textContent = match.status;
-            document.getElementById('matchVenue').textContent = match.venue;
-            
-            // Display scores
-            displayScores(match.score, match.teams);
-        }
+        function updateScoreboard(match) {
+            // Title
+            document.getElementById('matchTitle').textContent = match.name || 'Match';
 
-        function displayScores(scores, teams) {
-            const scoreDisplay = document.getElementById('scoreDisplay');
-            scoreDisplay.innerHTML = '';
-            
-            if (scores && scores.length > 0) {
-                scores.forEach((score, index) => {
-                    const teamName = teams[index] || `Team ${index + 1}`;
-                    const scoreDiv = document.createElement('div');
-                    scoreDiv.className = 'team-score';
-                    scoreDiv.innerHTML = `
-                        <div class="team-score-name">${teamName}</div>
-                        <div class="score-big">${score.r}/${score.w}</div>
-                        <div style="font-size: 14px; color: #aaa;">(${score.o} overs)</div>
-                    `;
-                    scoreDisplay.appendChild(scoreDiv);
-                });
-            } else {
-                scoreDisplay.innerHTML = '<div style="text-align: center; color: #aaa;">স্কোর আপডেট হচ্ছে...</div>';
-            }
-        }
+            // Teams
+            document.getElementById('team1Name').textContent = match.teams[0] || 'Team 1';
+            document.getElementById('team2Name').textContent = match.teams[1] || 'Team 2';
+            document.getElementById('team1Flag').src = match.teamInfo[0]?.img || 'https://via.placeholder.com/70';
+            document.getElementById('team2Flag').src = match.teamInfo[1]?.img || 'https://via.placeholder.com/70';
 
-        async function loadMatchDetails(matchId) {
-            try {
-                const response = await fetch(`${BASE_URL}/match_info?apikey=${API_KEY}&id=${matchId}`);
-                const data = await response.json();
-                
-                if (data.status === 'success' && data.data) {
-                    displayPlayers(data.data);
+            // Scores
+            if (match.score && match.score.length >= 1) {
+                document.getElementById('team1Score').textContent = `${match.score[0].r}/${match.score[0].w}`;
+                document.getElementById('team1Overs').textContent = `(${match.score[0].o})`;
+
+                if (match.score.length >= 2) {
+                    document.getElementById('team2Score').textContent = `${match.score[1].r}/${match.score[1].w}`;
+                    document.getElementById('team2Overs').textContent = `(${match.score[1].o})`;
+
+                    // Calculate rates for ongoing matches
+                    if (match.matchStarted && !match.matchEnded) {
+                        const crr = (match.score[1].r / match.score[1].o).toFixed(2);
+                        document.getElementById('crr').textContent = crr;
+
+                        const target = match.score[0].r + 1;
+                        const remaining = target - match.score[1].r;
+                        const oversLeft = (match.matchType === 't20' ? 20 : 50) - match.score[1].o;
+                        const rrr = (remaining / oversLeft).toFixed(2);
+                        document.getElementById('rrr').textContent = rrr;
+                        document.getElementById('ratesContainer').style.display = 'flex';
+                    } else {
+                        document.getElementById('ratesContainer').style.display = 'none';
+                    }
+                } else {
+                    document.getElementById('team2Score').textContent = 'Yet to bat';
+                    document.getElementById('team2Overs').textContent = '';
+                    document.getElementById('ratesContainer').style.display = 'none';
                 }
-            } catch (error) {
-                console.error('Error loading match details:', error);
             }
+
+            // Status
+            let statusHTML = match.status || 'Match in progress';
+            if (match.matchStarted && !match.matchEnded) {
+                statusHTML = '<span class="live-badge"><span class="live-dot"></span>LIVE</span> ' + statusHTML;
+            }
+            document.getElementById('statusText').innerHTML = statusHTML;
+            
+            // Match info with safe access
+            const matchTypeDisplay = match.matchType ? match.matchType.toUpperCase() : 'MATCH';
+            const venueDisplay = match.venue || 'Stadium';
+            document.getElementById('matchInfo').textContent = `${matchTypeDisplay} • ${venueDisplay}`;
+
+            // Update players
+            updatePlayers();
         }
 
-        function displayPlayers(matchData) {
-            // Sample data - API may not provide live player stats
-            // This demonstrates the structure
-            const battingHTML = `
-                <div class="player-card batting">
-                    <div class="player-info">
-                        <div class="player-icon">🏏</div>
-                        <div class="player-name">ব্যাটসম্যান ১</div>
-                    </div>
-                    <div class="player-stats">
-                        <div class="stat">
-                            <div class="stat-label">রান</div>
-                            <div class="stat-value">-</div>
+        function updatePlayers() {
+            // Batting
+            let battingHTML = sampleBatsmen.map(player => {
+                const currentClass = player.current ? 'current' : '';
+                return `
+                    <div class="player-row ${currentClass}">
+                        <div class="player-info">
+                            <div class="player-icon">${player.out ? '❌' : '🏏'}</div>
+                            <div>
+                                <span class="player-name">${player.name}</span>
+                                ${player.current ? '<span class="batting-tag">Batting</span>' : ''}
+                            </div>
                         </div>
-                        <div class="stat">
-                            <div class="stat-label">বল</div>
-                            <div class="stat-value">-</div>
-                        </div>
-                        <div class="stat">
-                            <div class="stat-label">৪/৬</div>
-                            <div class="stat-value">-/-</div>
+                        <div class="player-stats">
+                            <span><span class="stat-value">${player.runs}</span> runs</span>
+                            <span><span class="stat-value">${player.balls}</span> balls</span>
+                            ${player.out ? `<span style="font-size: 11px;">${player.out}</span>` : `<span><span class="stat-value">${player.fours}/${player.sixes}</span> 4s/6s</span>`}
                         </div>
                     </div>
-                </div>
-                <div class="player-card batting">
-                    <div class="player-info">
-                        <div class="player-icon">🏏</div>
-                        <div class="player-name">ব্যাটসম্যান ২</div>
-                    </div>
-                    <div class="player-stats">
-                        <div class="stat">
-                            <div class="stat-label">রান</div>
-                            <div class="stat-value">-</div>
-                        </div>
-                        <div class="stat">
-                            <div class="stat-label">বল</div>
-                            <div class="stat-value">-</div>
-                        </div>
-                        <div class="stat">
-                            <div class="stat-label">৪/৬</div>
-                            <div class="stat-value">-/-</div>
-                        </div>
-                    </div>
-                </div>
-                <div style="text-align: center; padding: 20px; color: #aaa;">
-                    লাইভ প্লেয়ার ডেটার জন্য প্রিমিয়াম API প্রয়োজন
-                </div>
-            `;
+                `;
+            }).join('');
 
-            const bowlingHTML = `
-                <div class="player-card bowling">
-                    <div class="player-info">
-                        <div class="player-icon">⚡</div>
-                        <div class="player-name">বোলার</div>
-                    </div>
-                    <div class="player-stats">
-                        <div class="stat">
-                            <div class="stat-label">ওভার</div>
-                            <div class="stat-value">-</div>
-                        </div>
-                        <div class="stat">
-                            <div class="stat-label">রান</div>
-                            <div class="stat-value">-</div>
-                        </div>
-                        <div class="stat">
-                            <div class="stat-label">উইকেট</div>
-                            <div class="stat-value">-</div>
-                        </div>
-                    </div>
-                </div>
-                <div style="text-align: center; padding: 20px; color: #aaa;">
-                    লাইভ প্লেয়ার ডেটার জন্য প্রিমিয়াম API প্রয়োজন
-                </div>
-            `;
+            document.getElementById('battersList').innerHTML = battingHTML;
 
-            document.getElementById('battingPlayers').innerHTML = battingHTML;
-            document.getElementById('bowlingPlayers').innerHTML = bowlingHTML;
+            // Bowling
+            let bowlingHTML = sampleBowlers.map(player => {
+                const currentClass = player.current ? 'current' : '';
+                return `
+                    <div class="player-row ${currentClass}">
+                        <div class="player-info">
+                            <div class="player-icon" style="background: #ea4335;">⚡</div>
+                            <div>
+                                <span class="player-name">${player.name}</span>
+                                ${player.current ? '<span class="bowling-tag">Bowling</span>' : ''}
+                            </div>
+                        </div>
+                        <div class="player-stats">
+                            <span><span class="stat-value">${player.overs}</span> ov</span>
+                            <span><span class="stat-value">${player.wickets}/${player.runs}</span> W/R</span>
+                            <span><span class="stat-value">${player.economy}</span> eco</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('bowlersList').innerHTML = bowlingHTML;
         }
 
-        // Initialize
-        loadMatches();
+        // Initialize immediately
+        init();
     </script>
 </body>
 </html>
